@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,19 +14,26 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+require __DIR__.'/auth.php';
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('dashboard')->namespace('Admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+    
+    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    // 404 Route
+    Route::get('/{any?}', function () {
+        abort('404');
+    })->where('any', '.*');
 });
 
-require __DIR__.'/auth.php';
+
+// Guest Route (check front.js)
+Route::get('/{any?}', function () {
+    return view('guest.home');
+})->name('guest.home')->where('any', '.*');

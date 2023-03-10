@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Usando Vite -->
-    @vite(['resources/js/back.js', 'resources/scss/back.scss'])
+    @vite(['resources/js/front.js', 'resources/scss/front.scss'])
 </head>
 
 <body>
@@ -85,8 +85,11 @@
             </div>
         </nav>
 
-        <main class="">
-            @yield('content')
+        <main>
+            {{-- Vue JS root --}}
+            <div id="root">
+
+            </div>
         </main>
     </div>
 </body>
